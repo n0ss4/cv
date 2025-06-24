@@ -1,0 +1,97 @@
+name: Compile LaTeX CV to PDF
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+      
+    - name: Update last modified dates
+      run: |
+        # Get current date in different formats
+        CURRENT_DATE=$(date '+%B %d, %Y')
+        CURRENT_DATE_ISO=$(date '+%Y-%m-%d')
+        CURRENT_DATETIME=$(date '+%Y-%m-%d %H:%M:%S UTC')
+        
+        # Update LaTeX file - add or update last modified comment
+        if grep -q "% Last modified:" main.tex; then
+          sed -i "s/% Last modified:.*/% Last modified: $CURRENT_DATE/" main.tex
+        else
+          sed -i '1i% Last modified: '"$CURRENT_DATE"'' main.tex
+        fi
+        
+        # Update README.md - add or update last modified badge
+        if grep -q "Last Updated" README.md; then
+          sed -i "s/Last Updated.*$/Last Updated: $CURRENT_DATE/" README.md
+        else
+          sed -i '1i**Last Updated:** '"$CURRENT_DATE"'\n' README.md
+        fi
+        
+        echo "CURRENT_DATE=$CURRENT_DATE" >> $GITHUB_ENV
+        echo "CURRENT_DATETIME=$CURRENT_DATETIME" >> $GITHUB_ENV
+      
+    - name: Compile LaTeX document
+      uses: xu-cheng/latex-action@v3
+      with:
+        root_file: main.tex
+        args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+        
+    - name: Auto-commit updated dates
+      if: success()
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Check if there are changes to commit
+        if [[ -n $(git status --porcelain) ]]; then
+          git add main.tex README.md
+          git commit -m "📅 Auto-update: Last modified date - ${{ env.CURRENT_DATE }}"
+          git push
+          echo "✅ Committed updated dates"
+        else
+          echo "ℹ️  No date changes to commit"
+        fi
+        
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: nossair-cv-pdf
+        path: main.pdf
+        
+    - name: Release PDF
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: main.pdf
+        tag_name: latest-${{ github.run_number }}
+        name: Latest CV - Nossair Ghazouani (${{ env.CURRENT_DATE }})
+        body: |
+          📄 **Curriculum Vitae - Nossair Ghazouani**
+          
+          **Generated:** ${{ env.CURRENT_DATETIME }}
+          **Commit:** ${{ github.sha }}
+          **Run:** #${{ github.run_number }}
+          
+          ---
+          
+          ### 📋 Latest Updates
+          - ✅ PDF automatically compiled from LaTeX source
+          - 📅 Last modified dates updated automatically
+          - 🔄 Version control maintained
+          
+          [📥 Download PDF](../../releases/download/latest-${{ github.run_number }}/main.pdf)
+        prerelease: false
+        draft: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
