@@ -1,0 +1,50 @@
+# .gitignore
+
+# Archivos generados por LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.alg
+*.lof
+*.lot
+*.gls
+*.glo
+*.xdy
+*.acn
+*.acr
+*.glg
+*.ist
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+
+# Archivos de backup
+*~
+*.backup
+*.bak
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Directorios de IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos temporales
+*.tmp
+*.temp
