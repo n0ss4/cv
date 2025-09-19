@@ -1,3 +1,3 @@
-**Last Updated: June 24, 2025
+**Last Updated: September 19, 2025
 
 # CV - Nossair Ghazouani
