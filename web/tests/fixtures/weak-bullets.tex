@@ -1,0 +1,16 @@
+% Defect: duty-style bullets with no measurable results. Expect: impact and verbs warn.
+\documentclass[10pt]{article}
+\usepackage[margin=2cm]{geometry}
+\input{web/tests/fixtures/_body}
+\pagestyle{empty}\setlength{\parindent}{0pt}
+\begin{document}
+{\LARGE \Person}\par taylor.example@example.com \quad +1 555 0177 \quad portfolio.example.org\par\bigskip
+\textbf{Summary}\par \Summary\par\medskip
+\textbf{Experience}\par Senior Backend Engineer, Example Payments, 2020 - present\par
+\textbullet{} Responsible for the settlement service and its maintenance.\par
+\textbullet{} Worked on the order pipeline with the platform team.\par
+\textbullet{} Helped with contract tests between services.\par
+\textbullet{} Participated in design reviews and on-call.\par\medskip
+\textbf{Education}\par BSc Computer Science, Example University, 2012 - 2016\par\medskip
+\textbf{Skills}\par \SkillsLine\par
+\end{document}

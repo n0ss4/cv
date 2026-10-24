@@ -1,0 +1,59 @@
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.alg
+*.lof
+*.lot
+*.gls
+*.glo
+*.xdy
+*.acn
+*.acr
+*.glg
+*.ist
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+
+# Your CV data and everything built from it. Never committed: this is what
+# keeps personal data out of the repository. See scripts/check-privacy.sh.
+mycv/
+build/
+*.pdf
+
+# Tectonic's TeX Live cache, placed here by CI so actions/cache can restore it
+.tectonic-cache/
+
+*~
+*.backup
+*.bak
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+*.tmp
+*.temp
+# Design-system reference file (21 MB, Figma Community) -- not redistributed.
+specs/*/design/Official Tailwind CSS Styles (Community).fig
+web/eval-fixtures/
+
+# Web checker: dependencies, build output and copied eval fixtures
+web/node_modules/
+web/dist/

@@ -1,0 +1,87 @@
+name: Deploy checker to GitHub Pages
+
+# Publishes the static ATS checker only -- the tool, built from tracked files.
+# It never sees a CV: CVs are read inside each visitor's browser, and the page
+# forbids itself from connecting anywhere (constitution II, CSP connect-src
+# 'none'). No mycv/ exists here, and nothing personal is deployed.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TECTONIC_VERSION: "0.17.0"
+  TECTONIC_SHA256: "8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7"
+  TECTONIC_CACHE_DIR: ${{ github.workspace }}/.tectonic-cache
+
+jobs:
+  build:
+    name: Test and build the checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Privacy check
+        run: make privacy
+
+      # The web tests read fixture PDFs that tectonic builds, as in build.yml.
+      - name: Cache Tectonic bundle
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.TECTONIC_CACHE_DIR }}
+          key: tectonic-${{ env.TECTONIC_VERSION }}-${{ hashFiles('atscv.cls', 'example/cv.toml', 'web/tests/fixtures/*.tex') }}
+          restore-keys: tectonic-${{ env.TECTONIC_VERSION }}-
+
+      - name: Install Tectonic
+        run: |
+          url="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          archive="${RUNNER_TEMP}/tectonic.tar.gz"
+          curl -fsSL "$url" -o "$archive"
+          echo "${TECTONIC_SHA256}  ${archive}" | sha256sum -c -
+          mkdir -p "${RUNNER_TEMP}/tectonic-bin"
+          tar -xzf "$archive" -C "${RUNNER_TEMP}/tectonic-bin"
+          sudo install -m 0755 "${RUNNER_TEMP}/tectonic-bin/tectonic" /usr/local/bin/tectonic
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      # Tests first (they include the built-page CSP check), then the bundle the
+      # Pages artifact is made of. VITE_SOURCE_URL fills the "Source" links
+      # from the repository itself, so no account name is written in code.
+      - name: Test and build
+        run: make web-test
+        env:
+          VITE_SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web/dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

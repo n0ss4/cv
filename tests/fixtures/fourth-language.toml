@@ -1,0 +1,32 @@
+# A language with no built-in headings, plus a section of the user's own.
+# expect-text: EXPÉRIENCE PROFESSIONNELLE
+# expect-text: BÉNÉVOLAT
+# The typeset apostrophe is the typographic one (’), as in every CV built here.
+# expect-text: Aujourd’hui
+[settings]
+languages = ["en", "fr"]
+pages = 1
+order = ["experience", "volunteering"]
+
+[header]
+name = "Robin Example"
+headline = { en = "Teacher", fr = "Enseignant" }
+
+[[experience]]
+title = { en = "Teacher", fr = "Enseignant" }
+org = "Example School"
+start = "2020"
+end = "present"
+
+[[volunteering]]
+title = { en = "Mentor", fr = "Mentor" }
+org = "Example Club"
+start = "2019"
+
+[labels.en]
+volunteering = "Volunteering"
+
+[labels.fr]
+experience = "Expérience professionnelle"
+volunteering = "Bénévolat"
+present = "Aujourd'hui"

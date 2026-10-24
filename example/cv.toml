@@ -1,0 +1,159 @@
+# ============================================================================
+#  Example CV -- a fictional person. Every name, company and contact here is
+#  invented; addresses use example.com, which is reserved for documentation.
+#
+#  Start your own with:   make new
+#  That copies this file to mycv/cv.toml, which git ignores. Edit that copy,
+#  never this one, and your data stays on your machine.
+# ============================================================================
+#
+#  How text works
+#  --------------
+#  Write plain text. Accents, &, %, #, _ and the rest are handled for you --
+#  there is no LaTeX to learn.
+#
+#  Any text can be written once, for every language:
+#      headline = "Data Engineer"
+#  or once per language, as a table keyed by language code:
+#      headline = { en = "Data Engineer", es = "Ingeniera de datos" }
+#  Longer translations read better as separate lines:
+#      bullets.en = ["...", "..."]
+#      bullets.es = ["...", "..."]
+#  Every language listed in settings.languages must be present.
+
+[settings]
+# One PDF per language, in this order. Headings are built in for en, es and ca;
+# for any other language add a [labels.<code>] table (see the end of this file).
+languages = ["en", "es", "ca"]
+
+# How many pages the PDF should have. `make verify` fails if it differs, which
+# catches a line of text quietly pushing a near-empty extra page.
+pages = 1
+
+# Optional:
+# font_size = 10            # 9, 10 or 11
+# accent = "115E59"         # heading colour, six hex digits
+# output = "CV_Doe_Jane"    # file name; defaults to CV_ plus your name
+# order = ["summary", "experience", "skills", "education"]   # section order
+
+[header]
+name = "Jane Doe"
+headline = { en = "Data Engineer", es = "Ingeniera de Datos", ca = "Enginyera de Dades" }
+location = { en = "Valencia, Spain", es = "Valencia, España", ca = "València, Espanya" }
+phone = "+1 555 0100"
+email = "jane.doe@example.com"
+
+# Optional. Relative to this file. Photos are expected in some countries and
+# discouraged in others (US, UK, Ireland) -- delete the line to leave it out.
+photo = "photo.png"
+
+links = [
+  { text = "janedoe.example.com", url = "https://janedoe.example.com" },
+  { text = "example.com/in/janedoe", url = "https://example.com/in/janedoe" },
+]
+
+# ----------------------------------------------------------------------------
+#  Sections. Each one is printed under a heading, in the order below unless
+#  settings.order says otherwise. Leave a section out and its heading goes too.
+# ----------------------------------------------------------------------------
+
+# A paragraph of text.
+[summary]
+en = "Data engineer with 6 years of experience designing batch and streaming pipelines for retail and logistics. Owns data platforms end to end, from ingestion to the dashboards the business runs on, and cut warehouse costs by 40% at her current company."
+es = "Ingeniera de datos con 6 años de experiencia diseñando pipelines batch y en streaming para retail y logística. Se encarga de plataformas de datos de principio a fin, desde la ingesta hasta los cuadros de mando del negocio, y redujo un 40% el coste del data warehouse en su empresa actual."
+ca = "Enginyera de dades amb 6 anys d'experiència dissenyant pipelines batch i en streaming per a retail i logística. S'encarrega de plataformes de dades de punta a punta, des de la ingesta fins als quadres de comandament del negoci, i va reduir un 40% el cost del data warehouse a la seva empresa actual."
+
+# Skills: a label and comma-separated keywords. Keyword matchers in applicant
+# tracking systems split on commas, so keep one skill per item.
+[[skills]]
+label = { en = "Languages", es = "Lenguajes", ca = "Llenguatges" }
+keywords = ["Python", "SQL", "Scala", "C#", "Bash"]
+
+[[skills]]
+label = { en = "Data", es = "Datos", ca = "Dades" }
+keywords = ["Apache Spark", "Kafka", "Airflow", "dbt", "Snowflake", "PostgreSQL"]
+
+[[skills]]
+label = { en = "Cloud & Tools", es = "Cloud y Herramientas", ca = "Cloud i Eines" }
+keywords = ["AWS", "Terraform", "Docker", "Kubernetes", "GitHub Actions"]
+
+# Entries: a role or qualification. start/end are free text; end = "present"
+# is translated for you. Bullets, location and end are optional.
+[[experience]]
+title = { en = "Senior Data Engineer", es = "Ingeniera de Datos Sénior", ca = "Enginyera de Dades Sènior" }
+org = "Lumen Analytics"
+location = { en = "Valencia, Spain", es = "Valencia, España", ca = "València, Espanya" }
+start = "2022"
+end = "present"
+bullets.en = [
+  "Redesigned the nightly warehouse load as incremental dbt models, cutting compute costs by 40% and run time from 5 hours to 50 minutes.",
+  "Built a Kafka streaming pipeline that gives the operations team stock levels with under one minute of delay.",
+  "Lead a team of four engineers and run the data platform's on-call rotation.",
+]
+bullets.es = [
+  "Rediseñó la carga nocturna del data warehouse como modelos incrementales de dbt, reduciendo un 40% el coste de cómputo y el tiempo de 5 horas a 50 minutos.",
+  "Construyó un pipeline en streaming con Kafka que da al equipo de operaciones el nivel de stock con menos de un minuto de retraso.",
+  "Lidera un equipo de cuatro ingenieros y la guardia de la plataforma de datos.",
+]
+bullets.ca = [
+  "Va redissenyar la càrrega nocturna del data warehouse com a models incrementals de dbt, reduint un 40% el cost de càlcul i el temps de 5 hores a 50 minuts.",
+  "Va construir un pipeline en streaming amb Kafka que dona a l'equip d'operacions el nivell d'estoc amb menys d'un minut de retard.",
+  "Lidera un equip de quatre enginyers i la guàrdia de la plataforma de dades.",
+]
+
+[[experience]]
+title = { en = "Data Engineer", es = "Ingeniera de Datos", ca = "Enginyera de Dades" }
+org = "Harbor & Pine Logistics"
+location = { en = "Madrid, Spain", es = "Madrid, España", ca = "Madrid, Espanya" }
+start = "2019"
+end = "2022"
+bullets.en = [
+  "Migrated 120 Airflow jobs from on-premise servers to AWS with no downtime.",
+  "Wrote the R&D team's shared Python library for route-optimisation datasets.",
+]
+bullets.es = [
+  "Migró 120 jobs de Airflow de servidores propios a AWS sin tiempo de inactividad.",
+  "Escribió la librería Python compartida del equipo de I+D para datasets de optimización de rutas.",
+]
+bullets.ca = [
+  "Va migrar 120 jobs d'Airflow de servidors propis a AWS sense temps d'inactivitat.",
+  "Va escriure la llibreria Python compartida de l'equip d'R+D per a datasets d'optimització de rutes.",
+]
+
+[[education]]
+title = { en = "BSc in Computer Science", es = "Grado en Ingeniería Informática", ca = "Grau en Enginyeria Informàtica" }
+org = "Example University"
+location = { en = "Valencia, Spain", es = "Valencia, España", ca = "València, Espanya" }
+start = "2015"
+end = "2019"
+bullets = { en = "Final project: anomaly detection on sensor data (10/10).", es = "Trabajo final: detección de anomalías en datos de sensores (10/10).", ca = "Treball final: detecció d'anomalies en dades de sensors (10/10)." }
+
+# Lines: a short label and value -- used here for awards and languages.
+[[awards]]
+label = "Example Datathon 2021"
+value = { en = "First place", es = "Primer puesto", ca = "Primer lloc" }
+
+[[languages]]
+label = { en = "Spanish, Catalan", es = "Español, catalán", ca = "Castellà, català" }
+value = { en = "Native", es = "Nativo", ca = "Nadiu" }
+
+[[languages]]
+label = { en = "English", es = "Inglés", ca = "Anglès" }
+value = { en = "Professional working proficiency (C1)", es = "Competencia profesional (C1)", ca = "Competència professional (C1)" }
+
+# ----------------------------------------------------------------------------
+#  Headings for another language, or different wording for a built-in one.
+#  Keys are section names, plus "present" for ongoing dates. For example:
+#
+#  [labels.fr]
+#  summary = "Profil"
+#  skills = "Compétences"
+#  experience = "Expérience professionnelle"
+#  education = "Formation"
+#  awards = "Prix"
+#  languages = "Langues"
+#  present = "Aujourd'hui"
+#
+#  A section of your own works the same way: add [[volunteering]] entries and
+#  give it a heading under [labels.<code>] for each of your languages.
+# ----------------------------------------------------------------------------

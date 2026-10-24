@@ -1,0 +1,5 @@
+# expect-error: header.name: is required
+# expect-error: header.summary: unknown field
+[header]
+headline = "Developer"
+summary = "Lands inside [header] because TOML keys belong to the table above them."

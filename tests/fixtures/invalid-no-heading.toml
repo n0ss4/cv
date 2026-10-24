@@ -1,0 +1,8 @@
+# expect-error: volunteering: has no heading for "en"
+[header]
+name = "Sam Example"
+headline = "Developer"
+
+[[volunteering]]
+title = "Mentor"
+org = "Example Club"

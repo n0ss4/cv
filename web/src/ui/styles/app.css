@@ -1,0 +1,82 @@
+/* Design tokens: one-to-one with the Theme collection in
+   specs/003-react-ats-checker/design/ats-checker-v2.fig (design/README.md).
+   Teal = privacy and measured results; violet = on-device AI. */
+@import "tailwindcss";
+
+:root {
+	color-scheme: light dark;
+	--bg: #F6F8F7;
+	--surface: #FFFFFF;
+	--surface-muted: #EEF4F2;
+	--border: #D9E4E1;
+	--text: #0F1F1C;
+	--text-muted: #52625E;
+	--accent: #115E59;
+	--accent-soft: #E3F2EF;
+	--on-accent: #FFFFFF;
+	--ai: #5B4BB7;
+	--ai-soft: #EFECFB;
+	--pass: #1F7A4D;
+	--pass-soft: #E7F5EE;
+	--warn: #9A5B00;
+	--warn-soft: #FFF4DE;
+	--fail: #B42318;
+	--fail-soft: #FDECEA;
+	--highlight: #FFE8A3;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #0B1211;
+		--surface: #121B19;
+		--surface-muted: #182321;
+		--border: #26332F;
+		--text: #E4ECEA;
+		--text-muted: #9BB0AA;
+		--accent: #5EC4B6;
+		--accent-soft: #10302C;
+		--on-accent: #0B1211;
+		--ai: #B3A7F7;
+		--ai-soft: #221D3D;
+		--pass: #4CC38A;
+		--pass-soft: #143326;
+		--warn: #F0B44C;
+		--warn-soft: #3A2C10;
+		--fail: #FF8A80;
+		--fail-soft: #3D1A17;
+		--highlight: #4A3B12;
+	}
+}
+
+@theme inline {
+	--color-bg: var(--bg);
+	--color-surface: var(--surface);
+	--color-surface-muted: var(--surface-muted);
+	--color-border: var(--border);
+	--color-text: var(--text);
+	--color-muted: var(--text-muted);
+	--color-accent: var(--accent);
+	--color-accent-soft: var(--accent-soft);
+	--color-on-accent: var(--on-accent);
+	--color-ai: var(--ai);
+	--color-ai-soft: var(--ai-soft);
+	--color-pass: var(--pass);
+	--color-pass-soft: var(--pass-soft);
+	--color-warn: var(--warn);
+	--color-warn-soft: var(--warn-soft);
+	--color-fail: var(--fail);
+	--color-fail-soft: var(--fail-soft);
+	--color-highlight: var(--highlight);
+	/* System fonts: a web font would be a download from somewhere (FR-004). */
+	--font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+	html { @apply bg-bg text-text antialiased; }
+	body { @apply min-h-dvh font-sans; }
+	:focus-visible { @apply outline-2 outline-offset-2 outline-accent; }
+	@media (prefers-reduced-motion: reduce) {
+		*, *::before, *::after { animation: none !important; transition: none !important; }
+	}
+}

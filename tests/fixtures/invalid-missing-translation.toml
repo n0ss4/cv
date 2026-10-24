@@ -1,0 +1,13 @@
+# expect-error: experience[0].bullets: missing translation for "es"
+# expect-error: header.headline: missing translation for "es"
+[settings]
+languages = ["en", "es"]
+
+[header]
+name = "Sam Example"
+headline = { en = "Developer" }
+
+[[experience]]
+title = "Developer"
+org = "Example Co"
+bullets.en = ["Did things."]

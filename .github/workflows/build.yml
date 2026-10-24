@@ -1,0 +1,121 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Read-only. This workflow used to stamp dates, commit, and publish releases with
+# a real person's CV attached -- which is how personal data ended up public. It
+# now builds the fictional example only, and publishes nothing.
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The build must be byte-for-byte the one a developer runs locally, so the
+  # engine is pinned rather than floating. Bumping this changes the TeX Live
+  # snapshot and can reflow the document -- rebuild locally with the same version
+  # and check the result before bumping.
+  TECTONIC_VERSION: "0.17.0"
+  TECTONIC_SHA256: "8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7"
+
+  # Inside the workspace so actions/cache can address it without depending on
+  # where tectonic puts its cache per platform. Gitignored. The `runner` context
+  # is not available to a workflow-level env block, which rules out RUNNER_TEMP.
+  TECTONIC_CACHE_DIR: ${{ github.workspace }}/.tectonic-cache
+
+jobs:
+  build:
+    name: Build and verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Runs first and on the raw checkout: if personal data was committed, fail
+      # before doing anything else with it.
+      - name: Privacy check
+        run: make privacy
+
+      # ~46 MB, half of it the precompiled LaTeX format. Building that format and
+      # fetching the TeX Live files is nearly all of a cold compile, so restoring
+      # this is where the run time goes. The key includes the engine version: the
+      # cached format is only valid for the binary that built it.
+      - name: Cache Tectonic bundle
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.TECTONIC_CACHE_DIR }}
+          key: tectonic-${{ env.TECTONIC_VERSION }}-${{ hashFiles('atscv.cls', 'example/cv.toml', 'tests/fixtures/*.toml') }}
+          restore-keys: tectonic-${{ env.TECTONIC_VERSION }}-
+
+      # A single static binary, verified against a known checksum. This replaced
+      # xu-cheng/latex-action, which pulled a Docker image tagged :latest and
+      # rebuilt quarterly -- the TeX Live version could therefore change with no
+      # commit here, silently reflowing the document.
+      - name: Install Tectonic
+        run: |
+          url="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          archive="${RUNNER_TEMP}/tectonic.tar.gz"
+
+          curl -fsSL "$url" -o "$archive"
+          echo "${TECTONIC_SHA256}  ${archive}" | sha256sum -c -
+
+          dest="${RUNNER_TEMP}/tectonic-bin"
+          mkdir -p "$dest"
+          tar -xzf "$archive" -C "$dest"
+          sudo install -m 0755 "$dest/tectonic" /usr/local/bin/tectonic
+
+          tectonic --version
+
+      # The runner image does not ship pdftotext, but it does ship an apt index,
+      # and `apt-get update` is the expensive half of this step. Try the index as
+      # it comes and refresh only if it has gone stale enough to fail.
+      - name: Install PDF tools
+        run: |
+          if command -v pdftotext >/dev/null 2>&1; then
+            exit 0
+          fi
+          # --no-install-recommends drops poppler-data, CJK encoding data that
+          # pdftotext does not need for Latin-script text.
+          install="sudo apt-get install -y -qq --no-install-recommends poppler-utils"
+          $install || { sudo apt-get update -qq && $install; }
+
+      # Through the Makefile on purpose: one definition of the build, shared with
+      # local development. There is no mycv/ here, so this is the example.
+      - name: Build and verify the example
+        run: make check DATA=example/cv.toml
+
+      - name: Renderer tests
+        run: make test
+
+      # The in-browser checker: every Vitest suite (domain, application,
+      # adapters on the fixture PDFs built above, UI in jsdom, the dependency
+      # rule) and the production build with its CSP. Node is for web/ only.
+      - name: Set up Node for the web checker
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Web checker tests and build
+        run: make web-test
+
+      # The example PDFs, for reviewing a layout change in a pull request. They
+      # contain only the fictional persona.
+      - name: Upload example PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: example-pdfs
+          path: build/*.pdf
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,23 @@
+{
+  "_doc": "Expected outcomes per fixture for /eval.html (real model) -- SC-004 / SC-005. expect: at least one of these finding types. forbid: none of these. noSeverity: no finding of these severities. profile: exact values extraction must produce (null = absent). Measured types are deterministic and also asserted by the Vitest suites; AI types need the real model.",
+  "fixtures": [
+    { "file": "example/CV_Jane_Doe_EN.pdf", "noSeverity": ["critical", "major"],
+      "profile": { "name": "Jane Doe", "email": "jane.doe@example.com", "phone": "+1 555 0100", "experienceCount": 2, "educationCount": 1 } },
+    { "file": "example/CV_Jane_Doe_ES.pdf", "noSeverity": ["critical", "major"], "profile": { "email": "jane.doe@example.com" } },
+    { "file": "two-column.pdf", "expect": ["multi_column_layout"], "profile": { "email": "taylor.example@example.com" } },
+    { "file": "orphan-bullets.pdf", "expect": ["detached_bullets"], "profile": { "email": "taylor.example@example.com" } },
+    { "file": "detached-dates.pdf", "expect": ["detached_dates"], "forbid": ["missing_dates"] },
+    { "file": "right-dates.pdf", "expect": ["detached_dates"], "forbid": ["missing_dates"] },
+    { "file": "no-email.pdf", "expect": ["missing_email"], "profile": { "email": null, "phone": "+1 555 0177" } },
+    { "file": "hyphenated.pdf", "expect": ["hyphenated_words"] },
+    { "file": "header-contact.pdf", "expect": ["contact_in_header_footer"], "forbid": ["missing_email"] },
+    { "file": "unusual-headings.pdf", "expect": ["unconventional_heading", "missing_experience_section"] },
+    { "file": "weak-bullets.pdf", "expect": ["duty_style_bullets", "no_measurable_results"] },
+    { "file": "table-layout.pdf", "expect": ["table_layout"], "forbid": ["missing_skills_section"] },
+    { "file": "text-as-graphics.pdf", "expect": ["text_as_graphics"] },
+    { "file": "skill-rating.pdf", "expect": ["skill_rating_graphics"] },
+    { "file": "ambiguous-dates.pdf", "expect": ["ambiguous_date_format"], "forbid": ["missing_dates"] },
+    { "file": "icon-contact.pdf", "expect": ["icon_only_contact"], "forbid": ["missing_email"] },
+    { "file": "scanned.pdf", "verdict": "unreadable" }
+  ]
+}

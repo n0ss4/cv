@@ -1,0 +1,20 @@
+% Defect: a sidebar beside the main column. Expect: columns fail.
+\documentclass[10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\input{web/tests/fixtures/_body}
+\pagestyle{empty}\setlength{\parindent}{0pt}
+\begin{document}
+{\LARGE \Person}\par taylor.example@example.com \quad +1 555 0177 \quad portfolio.example.org\par\bigskip
+\begin{minipage}[t]{0.3\textwidth}
+\textbf{SKILLS}\par Go and Python\par PostgreSQL and Kafka\par Kubernetes\par Terraform\par gRPC services\par AWS and GCP\par\medskip
+\textbf{LANGUAGES}\par English, native\par Spanish, fluent\par German, basic\par\medskip
+\textbf{EDUCATION}\par BSc Computer Science\par Example University\par 2012 - 2016\par
+\end{minipage}\hfill
+\begin{minipage}[t]{0.64\textwidth}
+\textbf{EXPERIENCE}\par
+Senior Backend Engineer, Example Payments, 2020 - present\par
+\JobA\par \JobB\par \JobC\par\medskip
+Backend Engineer, Example Logistics, 2016 - 2020\par
+\JobB\par \JobA\par
+\end{minipage}
+\end{document}

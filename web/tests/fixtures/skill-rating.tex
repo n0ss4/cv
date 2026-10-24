@@ -1,0 +1,18 @@
+% Defect: skill levels drawn as squares instead of words. Expect: skill_rating_graphics (measured).
+\documentclass[10pt]{article}
+\usepackage[margin=1.5cm]{geometry}
+\input{web/tests/fixtures/_body}
+\pagestyle{empty}\setlength{\parindent}{0pt}
+\newcommand{\lvl}{\rule{6pt}{6pt}\hspace{3pt}}
+\begin{document}
+{\LARGE \Person}\par taylor.example@example.com \quad +1 555 0177 \quad portfolio.example.org\par\bigskip
+\textbf{Summary}\par \Summary\par\medskip
+\textbf{Experience}\par Senior Backend Engineer, Example Payments, 2020 - present\par
+\JobA\par \JobB\par\medskip
+\textbf{Education}\par BSc Computer Science, Example University, 2012 - 2016\par\medskip
+\textbf{Skills}\par
+Go \hspace{2cm} \lvl\lvl\lvl\lvl\lvl\par
+Python \hspace{2cm} \lvl\lvl\lvl\lvl\par
+PostgreSQL \hspace{2cm} \lvl\lvl\lvl\lvl\par
+Kafka \hspace{2cm} \lvl\lvl\lvl\par
+\end{document}

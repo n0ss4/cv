@@ -1,0 +1,14 @@
+Analista de Datos — Ejemplo Logística (ficticia)
+
+Qué buscamos
+- Al menos 3 años de experiencia en análisis de datos
+- Dominio de SQL y Python
+- Experiencia con aprendizaje automático aplicado
+- Inglés B2 o superior
+- Titulación en Estadística, Matemáticas o similar
+
+Se valorará
+- Experiencia con Tableau o Power BI
+- Conocimientos de Airflow
+
+Ubicación: Valencia (híbrido)

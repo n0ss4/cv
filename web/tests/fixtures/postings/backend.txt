@@ -1,0 +1,19 @@
+Senior Backend Engineer — Example Freight (fictional)
+
+About us
+Example Freight moves parcels across Europe. We are hiring a Senior Backend Engineer to join our platform team.
+
+Requirements
+- 5+ years of professional backend development experience
+- Strong experience with Kubernetes in production
+- PostgreSQL schema design and query tuning
+- Experience building event-driven systems with Apache Kafka
+- English at C1 level or above
+- Bachelor's degree in Computer Science or a related field
+
+Nice to have
+- Terraform
+- Experience with gRPC
+
+Location: remote within the EU. Applicants must be eligible to work in the EU.
+Apply at jobs@example.com

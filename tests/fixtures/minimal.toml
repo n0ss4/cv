@@ -1,0 +1,13 @@
+# One language, no photo, no contact details beyond a name, one undated-location entry.
+# expect-text: Sam Example
+[settings]
+pages = 1
+
+[header]
+name = "Sam Example"
+headline = "Developer"
+
+[[experience]]
+title = "Developer"
+org = "Example Co"
+start = 2024

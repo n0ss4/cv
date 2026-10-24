@@ -1,0 +1,5 @@
+# expect-error: header.photo: file not found
+[header]
+name = "Sam Example"
+headline = "Developer"
+photo = "does-not-exist.jpg"

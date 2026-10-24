@@ -1,0 +1,18 @@
+# Characters that are special to LaTeX must reach the PDF exactly as written.
+# expect-text: C#, R&D, 100%, $5, snake_case, {braces}, ~tilde, a^b, back\slash
+# expect-text: Pipe | inside, double--dash
+# expect-text: Àlex Núñez-Ça·rol
+[settings]
+pages = 1
+
+[header]
+name = "Àlex Núñez-Ça·rol"
+headline = "Engineer"
+email = "a_b@example.com"
+
+[summary]
+text = "Pipe | inside, double--dash"
+
+[[skills]]
+label = "Odd"
+keywords = ["C#", "R&D", "100%", "$5", "snake_case", "{braces}", "~tilde", "a^b", 'back\slash']
